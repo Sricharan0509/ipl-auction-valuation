@@ -122,7 +122,7 @@ Normalised price is required for any cross-season comparison — purses inflate.
 - People register (player ID ↔ name) → `data/external/people.csv`
 - Format spec: cricsheet.org/format/json/
 - Structure: `meta` → `info` → `innings` → `overs` → `deliveries`
-- **Analysis window: IPL 2021–2025.** Keep older files, filter at parse time.
+- **Analysis window: IPL 2022–2026.** Keep older files, filter at parse time.
 
 ### Auction prices (compiled manually)
 `data/external/auction_prices.csv` with columns:
@@ -214,20 +214,19 @@ Every insight ends with an actionable recommendation containing a number.
 
 Update this after every milestone.
 
-| Decision                        | Choice    | Reasoning                            |
-| ------------------------------- | --------- | ------------------------------------ |
-| Over indexing                   |           |                                      |
-| Super over handling             |           |                                      |
-| Season normalisation            |           |                                      |
-| Wides/no-balls in balls faced   |           |                                      |
-| Byes/legbyes attribution        |           |                                      |
-| Bowler wicket credit            |           |                                      |
-| Franchise rename consolidation  |           |                                      |
-| Venue consolidation             |           |                                      |
-| Role-playing dimension approach |           |                                      |
-| Analysis window                 | 2021–2025 | Recent, comparable market conditions |
-| Batting threshold               | 150 balls |                                      |
-| Bowling threshold               | 200 balls |                                      |
+| Decision                       | Choice                                                                                                        | Reasoning                                                                                                                         |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Over indexing                  | Zero-indexed (per Cricsheet schema)                                                                           | Confirm against docs/data_notes.md before Milestone 5 phase logic                                                                 |
+| Super over handling            | Flagged via is_super_over (innings index 3+), kept in fact_deliveries not dropped                             | Exclusion happens at query time in Milestone 5 so the raw signal isn't lost upstream                                              |
+| Season normalisation           | First 4-digit substring of the season string                                                                  | Handles "2020/21" split-season format; IPL seasons are named by their starting year                                               |
+| Wides/no-balls in balls faced  | Excluded — is_legal_ball = (wides==0 and noballs==0)                                                          | Runs still charge the bowler via runs_total                                                                                       |
+| Byes/legbyes attribution       | Counted as legal balls faced; runs excluded from both batter and bowler                                       | Cricsheet's runs.batter field already excludes them natively, no extra logic needed                                               |
+| Bowler wicket credit           | Fixed set: bowled, caught, lbw, stumped, hit wicket, caught and bowled                                        | Run out, retired, obstructing the field, etc. not credited. 0 unrecognised kinds found across 4,466 wickets in the 2022-2026 data |
+| Franchise rename consolidation | Delhi Daredevils→Capitals, Kings XI Punjab→Punjab Kings, RCB Bangalore→Bengaluru, Pune Supergiants→Supergiant | Applied inline in the parser via TEAM_RENAMES                                                                                     |
+| Venue consolidation            | Not yet applied — raw venue string passed through unchanged                                                   | Deferred to Milestone 3 dim_venue mapping table                                                                                   |
+| Analysis window                | 2022–2026                                                                                                     | Superseded 2021–2025 per direct instruction                                                                                       |
+| Batting threshold              | 150 balls                                                                                                     |                                                                                                                                   |
+| Bowling threshold              | 200 balls                                                                                                     |                                                                                                                                   |
 
 ---
 
