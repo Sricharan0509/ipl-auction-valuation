@@ -168,8 +168,8 @@ a duplicated dimension. Record the choice in the decisions log.
 | #   | Milestone                                       | Output                   | Est.  | Status |
 | --- | ----------------------------------------------- | ------------------------ | ----- | ------ |
 | 1   | Environment, repo scaffold, data download       | Working repo + raw JSONs | 0.5 d | Done   |
-| 2   | JSON exploration + parser → `fact_deliveries`   | Delivery-level table     | 2 d   |        |
-| 3   | PostgreSQL schema + load script                 | Queryable database       | 1 d   |        |
+| 2   | JSON exploration + parser → `fact_deliveries`   | Delivery-level table     | 2 d   | Done   |
+| 3   | PostgreSQL schema + load script                 | Queryable database       | 1 d   | Done   |
 | 4   | Auction data + name reconciliation              | `fact_auction` joined    | 1 d   |        |
 | 5   | Phase-wise metrics SQL → `fact_player_season`   | Metrics table            | 2 d   |        |
 | 6   | EDA + insight write-up                          | Findings doc             | 1 d   |        |
